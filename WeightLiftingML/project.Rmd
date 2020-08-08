@@ -1,0 +1,58 @@
+# Weight Lifting Exercise for Machine Learning Project
+
+Herein, we analyze datasets from the fitness gear of six research study participants undertaking personal activity monitoring during weight lifting exercise. There is a societal movement to quantify how much of a particular activity one is undertaking; here we quantify how well the activity is being undertaken via the data from accelerometers, forearm, arm, and dumbell data of six participants. These participants were specifically asked to perform barbell lifts correctly and incorrectly in five different ways (more information available here: http://groupware.les.inf.puc-rio.br/har. Thus, our training data consists of a labeled set based on quality of the participant performance, while the testing set is not pre-identified. The overarching goal is to predict the label for the test observations. In order to do this, we create a model, estimate the out-of-sample error, and make predictions.
+
+## Modeling
+
+To make the data consistent and construct constant features, we first cleaned the data by removing excel division error strings `#DIV/0!` and replacing them with `NA` values and then converting empty strings to `NA` values.
+
+## Feature Selection
+
+With a clean data set, we next task explored the data and determine what was likely useful information.  An important goal of any model is to make it well-generalized so it may account for any future data.  Thus, we removed any features that contained NA values and any columns that appeared to be metadata.  These columns were dropped as any correlation that exists would likely be spurious and therefore cause the model to perform poorly.
+
+The following fields removed included:
+
+* the unlabled row index
+* `user_name`
+* `raw_timestamp_part_1`
+* `raw_timestamp_part_2`
+* `cvtd_timestamp`
+* `new_window`
+* `num_window`
+
+## Cross Validation
+
+Cross validation was achieved by splitting the training data into a test set and a training set using the following:
+
+```{r cross_validate}
+in.train <- createDataPartition(training.features$classe, p=.60, list=FALSE)
+
+train <- training.features[in.train[,1]]
+test <- training.features[-in.train[,1]]
+```
+
+The data was partioned by the `classe` variable to ensure the training set and test set contain examples of each class. 60% of the training data was allocated to the training set and the remainder for the validation set.
+
+## Prediction
+
+The random forest model was initially used to prediction.
+
+```{r train, echo=F}
+model.rf <- train(y=as.factor(train$classe), x=train[,!"classe",with=F], tuneGrid=data.frame(mtry=3), trControl=trainControl(method="none"), method="parRF")
+```
+
+```{r confusion_matrix, echo=F}
+confusionMatrix(predict(model.rf, newdata=transform.features(test)), factor(test$classe))
+```
+
+It's estimated that the out of sample error would reflect the Kappa statistic of `r confusionMatrix(predict(model.rf, newdata=transform.features(test)), factor(test$classe))$overall["Kappa"]`.
+
+### Variable Importance
+
+```{r variable_importance, echo=F}
+print(plot(varImp(model.rf, scale = FALSE)))
+```
+
+## Conclusion
+
+The random forest algorithm appears to predict well for activities from accelerometers measurements.

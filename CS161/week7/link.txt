@@ -1,0 +1,5 @@
+https://github.com/nathansoz/cs161/blob/master/week8/findMode.cpp
+
+https://github.com/jrgoldfinemiddleton/cs161/blob/master/week6/findModeTester.cpp
+
+http://www.chegg.com/homework-help/questions-and-answers/c-write-function-named-findmode-takes-parameters-array-int-size-array-returns-vector-conta-q9006481

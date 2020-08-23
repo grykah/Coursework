@@ -1,0 +1,11 @@
+
+# replace 'your_file' below with your actual source file names.
+# add more if needed.
+
+CXX = your_file.cpp
+# CXX += your_other_file.cpp         This will add the indicated file.  
+# CXX += your_other_other_file.hpp   This will add the indicated header file.  
+
+prog:
+	g++ ${CXX} -o prog
+

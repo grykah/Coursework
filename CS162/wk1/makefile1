@@ -1,0 +1,16 @@
+# 	basic makefile.
+#
+#	#'s are line-comments
+#
+#	g++ is the compiler.
+#	-o sets the executible name
+#
+#	Edit the following as so:
+# 	program		-	the name of your executable.
+# 	file1.cpp	-	whatever your source files are. add more as needed.
+# 	file1.hpp	-	whatever your headers are (if any), add more as needed.
+#
+#	type "make" or "make default" in terminal to use the makefile.
+
+program: 
+	g++ -o program file1.cpp file2.hpp	
